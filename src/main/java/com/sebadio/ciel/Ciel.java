@@ -1,8 +1,10 @@
 package com.sebadio.ciel;
 
+import com.sebadio.ciel.listeners.EventListener;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
 
@@ -23,9 +25,19 @@ public class Ciel {
         String OWNER_ID = config.get("OWNER_ID");
 
         DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(TOKEN);
+        builder.enableIntents(
+                GatewayIntent.GUILD_MESSAGES,
+                GatewayIntent.MESSAGE_CONTENT,
+                GatewayIntent.GUILD_MEMBERS
+        );
         builder.setStatus(OnlineStatus.valueOf(STATUS));
         builder.setActivity(Activity.playing(ACTIVITY));
         shardManager = builder.build();
+
+        // Listener registration
+
+        shardManager.addEventListener(new EventListener());
+
     }
 
     public ShardManager getShardManager() {
