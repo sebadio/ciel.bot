@@ -5,6 +5,7 @@ import com.sebadio.ciel.commands.admin.Unban;
 import com.sebadio.ciel.commands.misc.Avatar;
 import com.sebadio.ciel.commands.misc.Invite;
 import com.sebadio.ciel.commands.misc.Ping;
+import com.sebadio.ciel.commands.misc.UserInfo;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.session.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -33,7 +34,12 @@ public class EventListener extends ListenerAdapter {
             new Ban(event);
         } else if (msg.startsWith("!unban")) {
             new Unban(event);
+        } else if(msg.startsWith("!userinfo")){
+            new UserInfo(event);
         }
 
     }
+
+
+
 }
