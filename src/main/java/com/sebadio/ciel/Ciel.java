@@ -2,6 +2,7 @@ package com.sebadio.ciel;
 
 import com.sebadio.ciel.listeners.EventListener;
 import io.github.cdimascio.dotenv.Dotenv;
+import io.github.cdimascio.dotenv.DotenvException;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -11,11 +12,13 @@ import net.dv8tion.jda.api.sharding.ShardManager;
 import javax.security.auth.login.LoginException;
 
 public class Ciel {
-
     private final Dotenv config;
-
     private final ShardManager shardManager;
-    public Ciel() throws LoginException {
+    public ShardManager getShardManager() {
+        return shardManager;
+    }
+
+    public Ciel() throws LoginException, DotenvException {
 
         config = Dotenv.configure().load();
 
@@ -35,21 +38,16 @@ public class Ciel {
         shardManager = builder.build();
 
         // Listener registration
-
         shardManager.addEventListener(new EventListener());
-
-    }
-
-    public ShardManager getShardManager() {
-        return shardManager;
     }
 
     public static void main(String[] args){
         try {
             Ciel bot = new Ciel();
         }catch (LoginException e){
-            System.out.println("ERROR");
-            System.out.println(e);
+            System.out.println("ERROR: TOKEN was not provided.");
+        }catch (DotenvException e){
+            System.out.println("ERROR: .env File either not present or invalid data was provided.");
         }
     }
 
