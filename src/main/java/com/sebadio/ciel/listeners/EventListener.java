@@ -1,5 +1,7 @@
 package com.sebadio.ciel.listeners;
 
+import com.sebadio.ciel.commands.admin.Ban;
+import com.sebadio.ciel.commands.admin.Unban;
 import com.sebadio.ciel.commands.misc.Avatar;
 import com.sebadio.ciel.commands.misc.Invite;
 import com.sebadio.ciel.commands.misc.Ping;
@@ -27,6 +29,10 @@ public class EventListener extends ListenerAdapter {
             new Avatar(event);
         } else if(msg.startsWith("!invite")){
             new Invite(event);
+        } else if(msg.startsWith("!ban")){
+            new Ban(event);
+        } else if (msg.startsWith("!unban")) {
+            new Unban(event);
         }
 
     }

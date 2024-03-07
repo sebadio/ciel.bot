@@ -17,6 +17,7 @@ public class Ciel {
     public ShardManager getShardManager() {
         return shardManager;
     }
+    public Dotenv getConfig(){return config;}
 
     public Ciel() throws LoginException, DotenvException {
 
