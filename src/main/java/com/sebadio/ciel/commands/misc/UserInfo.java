@@ -3,6 +3,7 @@ package com.sebadio.ciel.commands.misc;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.time.format.DateTimeFormatter;
@@ -10,7 +11,7 @@ import java.util.Arrays;
 
 public class UserInfo {
 
-    public UserInfo(MessageReceivedEvent event){
+    public UserInfo(@NotNull MessageReceivedEvent event){
         Message message = event.getMessage();
         Mentions mentions = message.getMentions();
 
@@ -21,6 +22,15 @@ public class UserInfo {
             message.reply("Provide a user as target for this command to work.").queue();
             return;
         }
+
+        MessageEmbed embed = createEmbed(user, member);
+
+        message.replyEmbeds(embed).queue();
+
+    }
+
+    @NotNull
+    private MessageEmbed createEmbed(@NotNull User user, @NotNull Member member){
 
         EmbedBuilder embed = new EmbedBuilder();
         embed.setTitle(String.format("%s's information", user.getName()));
@@ -40,10 +50,6 @@ public class UserInfo {
         embed.addField("Roles", roles, false);
         embed.setColor(new Color(50, 157, 168));
 
-
-
-        message.replyEmbeds(embed.build()).queue();
-
+        return embed.build();
     }
-
 }
