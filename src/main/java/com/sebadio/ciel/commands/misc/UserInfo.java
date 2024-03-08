@@ -15,11 +15,16 @@ public class UserInfo {
         Message message = event.getMessage();
         Mentions mentions = message.getMentions();
 
+        if(mentions.getMembers().isEmpty()){
+            message.reply("Provide a user as a target.").queue();
+            return;
+        }
+
         User user = mentions.getUsers().get(0);
         Member member = mentions.getMembers().get(0);
 
         if(user == null || member == null){
-            message.reply("Provide a user as target for this command to work.").queue();
+            message.reply("Invalid user.").queue();
             return;
         }
 
