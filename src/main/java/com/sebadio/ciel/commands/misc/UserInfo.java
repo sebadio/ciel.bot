@@ -23,15 +23,9 @@ public class UserInfo {
         User user = mentions.getUsers().get(0);
         Member member = mentions.getMembers().get(0);
 
-        if(user == null || member == null){
-            message.reply("Invalid user.").queue();
-            return;
-        }
-
         MessageEmbed embed = createEmbed(user, member);
 
         message.replyEmbeds(embed).queue();
-
     }
 
     @NotNull
