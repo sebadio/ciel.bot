@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 public class Invite {
 
     public Invite(@NotNull MessageReceivedEvent event){
-        String inviteLink = String.format("https://discord.com/api/oauth2/authorize?client_id=%s&permissions=17740865203414&scope=bot", "1214983925626314832");
+        String inviteLink = String.format("https://discord.com/oauth2/authorize?client_id=%s&permissions=8&scope=bot+applications.commands", "1214983925626314832");
         event.getMessage()
                 .reply("You can invite me by clicking the button")
                 .addActionRow(
