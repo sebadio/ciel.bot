@@ -2,6 +2,7 @@ package com.sebadio.ciel.commands.misc;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,6 +27,15 @@ public class UserInfo {
         MessageEmbed embed = createEmbed(user, member);
 
         message.replyEmbeds(embed).queue();
+    }
+
+    public UserInfo(@NotNull SlashCommandInteractionEvent event) {
+        Member member = event.getOption("user").getAsMember();
+        User user = event.getOption("user").getAsUser();
+
+        MessageEmbed embed = createEmbed(user, member);
+
+        event.replyEmbeds(embed).queue();
     }
 
     @NotNull

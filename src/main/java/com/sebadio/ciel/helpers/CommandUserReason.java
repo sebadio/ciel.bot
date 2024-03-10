@@ -3,6 +3,7 @@ package com.sebadio.ciel.helpers;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.UserSnowflake;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,6 +16,8 @@ public abstract class CommandUserReason {
     public UserSnowflake userSnowflake;
     public Guild guild;
     public String reason;
+
+    public CommandUserReason(){}
 
     public CommandUserReason(@NotNull MessageReceivedEvent event){
         Message message = event.getMessage();
@@ -34,6 +37,13 @@ public abstract class CommandUserReason {
         this.userSnowflake = UserSnowflake.fromId(userId);
         this.guild = event.getGuild();
         this.message = message;
+    }
+
+    public CommandUserReason(@NotNull SlashCommandInteractionEvent event) {
+        this.guild = event.getGuild();
+        String userId = event.getOption("user").getAsUser().getId();
+        this.userSnowflake = UserSnowflake.fromId(userId);
+        this.reason = event.getOption("reason") != null ? event.getOption("reason").getAsString() : "No reason provided";
     }
 
 }

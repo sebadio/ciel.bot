@@ -1,6 +1,9 @@
 package com.sebadio.ciel;
 
-import com.sebadio.ciel.listeners.EventListener;
+import com.sebadio.ciel.helpers.Config;
+import com.sebadio.ciel.listeners.PrefixEventListener;
+import com.sebadio.ciel.listeners.ReadyEventListener;
+import com.sebadio.ciel.listeners.SlashCommandEventListener;
 import io.github.cdimascio.dotenv.Dotenv;
 import io.github.cdimascio.dotenv.DotenvException;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -21,7 +24,7 @@ public class Ciel {
 
     public Ciel() throws LoginException, DotenvException {
 
-        config = Dotenv.configure().load();
+        config = Config.get();
 
         String TOKEN = config.get("TOKEN");
         String STATUS = config.get("STATUS");
@@ -39,7 +42,9 @@ public class Ciel {
         shardManager = builder.build();
 
         // Listener registration
-        shardManager.addEventListener(new EventListener());
+        shardManager.addEventListener(new ReadyEventListener());
+        shardManager.addEventListener(new PrefixEventListener());
+        shardManager.addEventListener(new SlashCommandEventListener());
     }
 
     public static void main(String[] args){
