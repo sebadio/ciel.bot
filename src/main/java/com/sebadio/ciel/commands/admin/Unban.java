@@ -27,6 +27,7 @@ public class Unban extends CommandUserReason {
 
     public  Unban(@NotNull SlashCommandInteractionEvent event){
         super(event);
+        if(userSnowflake == null || guild == null) return;
 
         guild.unban(userSnowflake)
                 .reason(reason)

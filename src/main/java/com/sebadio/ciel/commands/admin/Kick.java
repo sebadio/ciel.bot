@@ -13,6 +13,8 @@ public class Kick extends CommandUserReason {
     public Kick(@NotNull MessageReceivedEvent event) {
         super(event);
 
+        if(userSnowflake == null || guild == null) return;
+
         guild.kick(userSnowflake)
                 .reason(reason)
                 .queue(

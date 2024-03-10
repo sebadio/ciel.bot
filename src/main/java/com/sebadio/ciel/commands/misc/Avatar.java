@@ -1,36 +1,44 @@
 package com.sebadio.ciel.commands.misc;
 
+import com.sebadio.ciel.helpers.CommandUser;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
-public class Avatar {
+public class Avatar extends CommandUser {
 
     public Avatar(@NotNull MessageReceivedEvent event) {
-        User user = event.getAuthor();
-        String avatar = user.getAvatarUrl();
+        super(event);
+        if(userSnowflake == null || guild == null) return;
 
-        if (avatar == null || avatar.isEmpty()) {
-            event.getMessage().reply("Couldn't get the user's avatar.").queue();
-            return;
-        }
+        event.getJDA().retrieveUserById(userSnowflake.getId()).queue(
+                user ->{
+                    String avatar = user.getAvatarUrl();
 
-        MessageEmbed embed = createEmbed(avatar, user.getName());
+                    if (avatar == null || avatar.isEmpty()) {
+                        event.getMessage().reply("Couldn't get the user's avatar.").queue();
+                        return;
+                    }
 
-        event.getMessage()
-                .replyEmbeds(embed)
-                .queue();
+                    MessageEmbed embed = createEmbed(avatar, user.getName());
+
+                    event.getMessage()
+                            .replyEmbeds(embed)
+                            .queue();
+                },
+                f -> event.getMessage().reply("Couldn't get the user's avatar.").queue()
+        );
+
     }
 
     public Avatar(@NotNull SlashCommandInteractionEvent event) {
 
-        User user = event.getUser();
+        User user = event.getOption("user").getAsUser();
         String avatar = user.getAvatarUrl();
 
         if (avatar == null || avatar.isEmpty()) {

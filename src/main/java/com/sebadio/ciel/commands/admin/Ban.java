@@ -13,6 +13,8 @@ public class Ban extends CommandUserReason {
 
     public Ban(@NotNull MessageReceivedEvent event) {
         super(event);
+        if(userSnowflake == null || guild == null) return;
+
         guild.ban(userSnowflake, 0, TimeUnit.DAYS)
                 .reason(reason)
                 .queue(
