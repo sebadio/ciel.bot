@@ -1,6 +1,7 @@
 package com.sebadio.ciel.commands.admin;
 
 import com.sebadio.ciel.helpers.CommandUserReason;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -16,6 +17,12 @@ public class Unban extends CommandUserReason {
 
     public Unban(@NotNull MessageReceivedEvent event) {
         super(event);
+
+        boolean userHasPermission = event.getMember().hasPermission(Permission.BAN_MEMBERS);
+        if(!userHasPermission) {
+            event.getMessage().reply("You don't have permissions to do that.").queue();
+            return;
+        }
 
         guild.unban(userSnowflake)
                 .reason(reason)

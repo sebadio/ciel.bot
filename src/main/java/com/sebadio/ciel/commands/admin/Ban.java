@@ -1,5 +1,9 @@
 package com.sebadio.ciel.commands.admin;
 
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.UserSnowflake;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
@@ -14,6 +18,13 @@ public class Ban extends CommandUserReason {
     public Ban(@NotNull MessageReceivedEvent event) {
         super(event);
         if(userSnowflake == null || guild == null) return;
+        boolean userHasPermission = event.getMember().hasPermission(Permission.BAN_MEMBERS);
+
+        if(!userHasPermission) {
+            event.getMessage().reply("You don't have permissions to do that.").queue();
+            return;
+        }
+
 
         guild.ban(userSnowflake, 0, TimeUnit.DAYS)
                 .reason(reason)

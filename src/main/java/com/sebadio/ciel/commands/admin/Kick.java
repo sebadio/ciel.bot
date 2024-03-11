@@ -1,6 +1,7 @@
 package com.sebadio.ciel.commands.admin;
 
 import com.sebadio.ciel.helpers.CommandUserReason;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
@@ -12,8 +13,14 @@ public class Kick extends CommandUserReason {
 
     public Kick(@NotNull MessageReceivedEvent event) {
         super(event);
-
         if(userSnowflake == null || guild == null) return;
+
+        boolean userHasPermission = event.getMember().hasPermission(Permission.KICK_MEMBERS);
+        if(!userHasPermission) {
+            event.getMessage().reply("You don't have permissions to do that.").queue();
+            return;
+        }
+
 
         guild.kick(userSnowflake)
                 .reason(reason)
