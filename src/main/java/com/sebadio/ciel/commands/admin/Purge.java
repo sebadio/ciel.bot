@@ -40,20 +40,7 @@ public class Purge {
         TextChannel channel = event.getChannel().asTextChannel();
         channel.getHistory().retrievePast(Math.min(msgQuantity, 100) + 1)
                 .queue(
-                        messages -> {
-                            List<Message> messagesToDelete = new java.util.ArrayList<>(messages.stream()
-                                    .filter(m -> m.getTimeCreated().isAfter(OffsetDateTime.now().minusWeeks(2)))
-                                    .toList());
-
-                            if (messagesToDelete.size() > 1) messagesToDelete.remove(0);
-
-
-                            int finalMsgQuantity = messagesToDelete.size();
-                            channel.deleteMessages(messagesToDelete).queue(
-                                    success -> channel.sendMessage(String.format(successMessage, finalMsgQuantity)).queue(),
-                                    failure -> channel.sendMessage(errorMessage).queue()
-                            );
-                        },
+                        messages -> processMessages(event, messages, channel),
                         failure -> channel.sendMessage(errorMessage).queue()
                 );
     }
@@ -67,22 +54,41 @@ public class Purge {
         }
 
         TextChannel channel = event.getChannel().asTextChannel();
-        channel.getHistory().retrievePast(Math.min(quantity, 100) + 1)
+        channel.getHistory().retrievePast(Math.min(quantity, 100))
                 .queue(
-                        messages -> {
-                            List<Message> messagesToDelete = new java.util.ArrayList<>(messages.stream()
-                                    .filter(m -> m.getTimeCreated().isAfter(OffsetDateTime.now().minusWeeks(2)))
-                                    .toList());
-
-                            int finalMsgQuantity = messagesToDelete.size();
-                            channel.deleteMessages(messagesToDelete).queue(
-                                    success -> event.reply(String.format(successMessage, finalMsgQuantity)).queue(),
-                                    failure -> event.reply(errorMessage).queue()
-                            );
-                        },
+                        messages -> processMessages(event, messages, channel),
                         failure -> event.reply(errorMessage).queue()
                 );
 
+    }
+
+
+    private void processMessages(@NotNull MessageReceivedEvent event, @NotNull List<Message> messages, @NotNull TextChannel channel) {
+        List<Message> messagesToDelete = filterDeletableMessages(messages);
+        if (messagesToDelete.size() > 1) messagesToDelete.remove(0);
+
+
+        int finalMsgQuantity = messagesToDelete.size();
+        channel.deleteMessages(messagesToDelete).queue(
+                success -> channel.sendMessage(String.format(successMessage, finalMsgQuantity)).queue(),
+                failure -> channel.sendMessage(errorMessage).queue()
+        );
+    }
+
+    private void processMessages(@NotNull SlashCommandInteractionEvent event, @NotNull List<Message> messages, @NotNull TextChannel channel) {
+        List<Message> messagesToDelete = filterDeletableMessages(messages);
+        int finalMsgQuantity = messagesToDelete.size();
+        channel.deleteMessages(messagesToDelete).queue(
+                success -> event.reply(String.format(successMessage, finalMsgQuantity)).queue(),
+                failure -> event.reply(errorMessage).queue()
+        );
+    }
+
+
+    private List<Message> filterDeletableMessages(@NotNull List<Message> messages) {
+        return new java.util.ArrayList<>(messages.stream()
+                .filter(m -> m.getTimeCreated().isAfter(OffsetDateTime.now().minusWeeks(2)))
+                .toList());
     }
 
 }
