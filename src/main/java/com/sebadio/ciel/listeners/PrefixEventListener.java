@@ -2,6 +2,7 @@ package com.sebadio.ciel.listeners;
 
 import com.sebadio.ciel.commands.admin.Ban;
 import com.sebadio.ciel.commands.admin.Kick;
+import com.sebadio.ciel.commands.admin.Purge;
 import com.sebadio.ciel.commands.admin.Unban;
 import com.sebadio.ciel.commands.misc.Avatar;
 import com.sebadio.ciel.commands.misc.Invite;
@@ -28,6 +29,7 @@ public class PrefixEventListener extends ListenerAdapter {
         commands.put("!unban", Unban::new);
         commands.put("!userinfo", UserInfo::new);
         commands.put("!kick", Kick::new);
+        commands.put("!purge", Purge::new);
     }
 
     @Override
