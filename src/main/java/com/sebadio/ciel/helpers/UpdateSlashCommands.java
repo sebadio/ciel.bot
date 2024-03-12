@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
 import java.util.ArrayList;
@@ -43,6 +44,10 @@ public class UpdateSlashCommands {
                 .addOption(OptionType.STRING, "reason", "The reason you want to kick them, not really important though.", false)
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.KICK_MEMBERS));
 
+        SlashCommandData purge = Commands.slash("purge", "I remove the quantity of messages you specify me to from existence")
+                .addOption(OptionType.INTEGER, "quantity", "Quantity of messages to erase", true)
+                .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MESSAGE_MANAGE));
+
         commands.add(ping);
         commands.add(avatar);
         commands.add(invite);
@@ -50,8 +55,8 @@ public class UpdateSlashCommands {
         commands.add(ban);
         commands.add(unban);
         commands.add(kick);
+        commands.add(purge);
     }
-
 
 
 }

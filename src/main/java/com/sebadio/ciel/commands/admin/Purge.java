@@ -2,6 +2,7 @@ package com.sebadio.ciel.commands.admin;
 
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -56,4 +57,32 @@ public class Purge {
                         failure -> channel.sendMessage(errorMessage).queue()
                 );
     }
+
+    public Purge(@NotNull SlashCommandInteractionEvent event) {
+        int quantity = event.getOption("quantity").getAsInt();
+
+        if (quantity > 100 || quantity < 1) {
+            event.reply("I can only remove between 1 and 100 messages at a time!.").setEphemeral(true).queue();
+            return;
+        }
+
+        TextChannel channel = event.getChannel().asTextChannel();
+        channel.getHistory().retrievePast(Math.min(quantity, 100) + 1)
+                .queue(
+                        messages -> {
+                            List<Message> messagesToDelete = new java.util.ArrayList<>(messages.stream()
+                                    .filter(m -> m.getTimeCreated().isAfter(OffsetDateTime.now().minusWeeks(2)))
+                                    .toList());
+
+                            int finalMsgQuantity = messagesToDelete.size();
+                            channel.deleteMessages(messagesToDelete).queue(
+                                    success -> event.reply(String.format(successMessage, finalMsgQuantity)).queue(),
+                                    failure -> event.reply(errorMessage).queue()
+                            );
+                        },
+                        failure -> event.reply(errorMessage).queue()
+                );
+
+    }
+
 }
