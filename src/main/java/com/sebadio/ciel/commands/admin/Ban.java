@@ -18,8 +18,13 @@ public class Ban extends CommandUserReason {
     public Ban(@NotNull MessageReceivedEvent event) {
         super(event);
         if(userSnowflake == null || guild == null) return;
-        boolean userHasPermission = event.getMember().hasPermission(Permission.BAN_MEMBERS);
 
+        if(!guild.getSelfMember().hasPermission(Permission.BAN_MEMBERS)){
+            event.getMessage().reply("I don't have permissions to ban members in this server!").queue();
+            return;
+        }
+
+        boolean userHasPermission = event.getMember().hasPermission(Permission.BAN_MEMBERS);
         if(!userHasPermission) {
             event.getMessage().reply("You don't have permissions to do that.").queue();
             return;
@@ -36,6 +41,13 @@ public class Ban extends CommandUserReason {
 
     public Ban(@NotNull SlashCommandInteractionEvent event) {
         super(event);
+        if(userSnowflake == null || guild == null) return;
+
+        if(!guild.getSelfMember().hasPermission(Permission.BAN_MEMBERS)){
+            event.reply("I don't have permissions to ban members in this server!").queue();
+            return;
+        }
+
         guild.ban(userSnowflake, 0, TimeUnit.DAYS)
                 .reason(reason)
                 .queue(

@@ -17,6 +17,12 @@ public class Unban extends CommandUserReason {
 
     public Unban(@NotNull MessageReceivedEvent event) {
         super(event);
+        if(userSnowflake == null || guild == null) return;
+
+        if(!guild.getSelfMember().hasPermission(Permission.BAN_MEMBERS)){
+            event.getMessage().reply("I don't have permissions to ban members in this server!").queue();
+            return;
+        }
 
         boolean userHasPermission = event.getMember().hasPermission(Permission.BAN_MEMBERS);
         if(!userHasPermission) {
@@ -35,6 +41,11 @@ public class Unban extends CommandUserReason {
     public  Unban(@NotNull SlashCommandInteractionEvent event){
         super(event);
         if(userSnowflake == null || guild == null) return;
+
+        if(!guild.getSelfMember().hasPermission(Permission.BAN_MEMBERS)){
+            event.reply("I don't have permissions to ban members in this server!").queue();
+            return;
+        }
 
         guild.unban(userSnowflake)
                 .reason(reason)

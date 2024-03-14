@@ -15,9 +15,16 @@ public class Softban extends CommandUser {
     private final String unbanErrorMessage = "Failed to unban %s";
     public Softban(MessageReceivedEvent event) {
         super(event);
+        if(userSnowflake == null || guild == null) return;
 
         if(!guild.getSelfMember().hasPermission(Permission.BAN_MEMBERS)){
             event.getMessage().reply(noPermissionsErrorMessage).queue();
+            return;
+        }
+
+        boolean userHasPermission = event.getMember().hasPermission(Permission.BAN_MEMBERS);
+        if(!userHasPermission) {
+            event.getMessage().reply("You don't have permissions to do that.").queue();
             return;
         }
 
@@ -33,6 +40,7 @@ public class Softban extends CommandUser {
 
     public Softban(SlashCommandInteractionEvent event) {
         super(event);
+        if(userSnowflake == null || guild == null) return;
 
         if(!guild.getSelfMember().hasPermission(Permission.BAN_MEMBERS)){
             event.reply(noPermissionsErrorMessage).queue();
