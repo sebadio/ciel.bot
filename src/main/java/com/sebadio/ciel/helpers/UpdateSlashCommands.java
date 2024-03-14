@@ -4,7 +4,6 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
-import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
 import java.util.ArrayList;
@@ -39,6 +38,10 @@ public class UpdateSlashCommands {
                 .addOption(OptionType.STRING, "reason", "The reason you want to unban them, not really important though.", false)
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.BAN_MEMBERS));
 
+        SlashCommandData softban = Commands.slash("softban", "I softban (ban and unban) the user you tell me")
+                .addOption(OptionType.USER, "user", "The user you want to softban", true)
+                .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.BAN_MEMBERS));
+
         SlashCommandData kick = Commands.slash("kick", "I kick the user you tell me to")
                 .addOption(OptionType.USER, "user", "The user you want to kick", true)
                 .addOption(OptionType.STRING, "reason", "The reason you want to kick them, not really important though.", false)
@@ -54,6 +57,7 @@ public class UpdateSlashCommands {
         commands.add(userinfo);
         commands.add(ban);
         commands.add(unban);
+        commands.add(softban);
         commands.add(kick);
         commands.add(purge);
     }

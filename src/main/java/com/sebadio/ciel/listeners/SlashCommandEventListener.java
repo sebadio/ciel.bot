@@ -1,9 +1,6 @@
 package com.sebadio.ciel.listeners;
 
-import com.sebadio.ciel.commands.admin.Ban;
-import com.sebadio.ciel.commands.admin.Kick;
-import com.sebadio.ciel.commands.admin.Purge;
-import com.sebadio.ciel.commands.admin.Unban;
+import com.sebadio.ciel.commands.admin.*;
 import com.sebadio.ciel.commands.misc.Avatar;
 import com.sebadio.ciel.commands.misc.Invite;
 import com.sebadio.ciel.commands.misc.Ping;
@@ -27,6 +24,7 @@ public class SlashCommandEventListener extends ListenerAdapter {
         commands.put("invite", Invite::new);
         commands.put("ban", Ban::new);
         commands.put("unban", Unban::new);
+        commands.put("softban", Softban::new);
         commands.put("userinfo", UserInfo::new);
         commands.put("kick", Kick::new);
         commands.put("purge", Purge::new);
